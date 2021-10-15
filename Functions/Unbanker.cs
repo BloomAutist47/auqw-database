@@ -7,8 +7,9 @@ using System;
 
 public class Script {
 	public ScriptInterface bot => ScriptInterface.Instance;
-
 	public void ScriptMain(ScriptInterface bot){
+		
+
 
 		// You can do this
 		string[] requiredItems = {"Dragon Claw",
@@ -55,7 +56,7 @@ public class Script {
 
 		// Banks unneeded items that are included in the whitelisted
 		foreach(var item in bot.Inventory.Items) {
-			if (!Array.Exists(Items, x => x == item.Category.ToString())))
+			if (!Whitelisted.Contains(item.Category.ToString())) continue;
 			if (item.Name != "Treasure Potion" && item.Coins && !Array.Exists(Items, x => x == item.Name)) bot.Inventory.ToBank(item.Name);
 		}
 
