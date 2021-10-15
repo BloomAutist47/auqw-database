@@ -74,12 +74,14 @@ public class Script {
     public void SafeMapJoin(string mapName, string mapNumber, string cellName, string padName) {
         //Joins the specified map.
         maintainJoinLoop:
+        if (bot.Map.Name != mapName){
             ExitCombat();
             bot.Player.Join($"{mapName}-{mapNumber}", cellName, padName);
             bot.Wait.ForMapLoad(mapName);
             if (bot.Map.Name != mapName) goto maintainJoinLoop;
             if (bot.Player.Cell != cellName) bot.Player.Jump(cellName, padName);
             bot.Log($"[{DateTime.Now:HH:mm:ss}] Joined map {mapName}-{mapNumber} ({padName}, {cellName}).");
+        }        
     }
 
 
