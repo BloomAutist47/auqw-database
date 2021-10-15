@@ -3,7 +3,7 @@ using RBot;
 using System.Collections.Generic;
 public class Script
 {
-    //-----------EDIT ABOVE-------------//
+    //-----------EDIT BELOW-------------//
     public string MapNumber = "69699";
     public string[] RequiredItems = { };
     public string[] EquippedItems = { };
