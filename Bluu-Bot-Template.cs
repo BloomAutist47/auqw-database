@@ -12,13 +12,12 @@ public class Script
 
     int FarmLoop = 0;
     int SavedState = 0;
-    int QuestCounter = 0;
     public ScriptInterface bot => ScriptInterface.Instance;
     public void ScriptMain(ScriptInterface bot)
     {
         while (bot.Player.Loaded != true) { }
         if (bot.Player.Cell != "Wait") bot.Player.Jump("Wait", "Spawn");
-        
+
         ConfigureBotOptions();
         ConfigureLiteSettings();
 
@@ -48,82 +47,82 @@ public class Script
 
     public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID, string MonsterName)
     {
-        //Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
-        
-        //Must have the following functions in your script:
-        //SafeMapJoin
-        //SmartSaveState
-        //SkillList
-        //ExitCombat
-        //GetDropList OR ItemWhitelist
-        
-        //Must have the following commands under public class Script:
-        //int FarmLoop = 0;
-        //int SavedState = 0;
+    //Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
 
-        startFarmLoop:
-            if (FarmLoop > 0) goto maintainFarmLoop;
-            SavedState += 1;
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Started Farming Loop {SavedState}.");
-            goto maintainFarmLoop;
+    //Must have the following functions in your script:
+    //SafeMapJoin
+    //SmartSaveState
+    //SkillList
+    //ExitCombat
+    //GetDropList OR ItemWhitelist
 
-        breakFarmLoop:
-            SmartSaveState(MapNumber);
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
-            FarmLoop = 0;
-            goto startFarmLoop;
+    //Must have the following commands under public class Script:
+    //int FarmLoop = 0;
+    //int SavedState = 0;
 
-        maintainFarmLoop:
-            while (!bot.Inventory.Contains(ItemName, ItemQuantity))
-            {
-                FarmLoop += 1;
-                if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
-                if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
-                bot.Quests.EnsureAccept(QuestID);
-                bot.Options.AggroMonsters = true;
-                bot.Player.Attack(MonsterName);
-                if (FarmLoop > 8700) goto breakFarmLoop;
-            }
+    startFarmLoop:
+        if (FarmLoop > 0) goto maintainFarmLoop;
+        SavedState += 1;
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Started Farming Loop {SavedState}.");
+        goto maintainFarmLoop;
+
+    breakFarmLoop:
+        SmartSaveState(MapNumber);
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
+        FarmLoop = 0;
+        goto startFarmLoop;
+
+    maintainFarmLoop:
+        while (!bot.Inventory.Contains(ItemName, ItemQuantity))
+        {
+            FarmLoop += 1;
+            if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+            if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+            bot.Quests.EnsureAccept(QuestID);
+            bot.Options.AggroMonsters = true;
+            bot.Player.Attack(MonsterName);
+            if (FarmLoop > 8700) goto breakFarmLoop;
+        }
     }
 
     public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID, string MonsterName)
     {
-        //Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location.
+    //Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location.
 
-        //Must have the following functions in your script:
-        //SafeMapJoin
-        //SmartSaveState
-        //ExitCombat
-        //SkillList
-        //GetDropList OR ItemWhitelist
+    //Must have the following functions in your script:
+    //SafeMapJoin
+    //SmartSaveState
+    //ExitCombat
+    //SkillList
+    //GetDropList OR ItemWhitelist
 
-        //Must have the following commands under public class Script:
-        //int FarmLoop = 0;
-        //int SavedState = 0;
+    //Must have the following commands under public class Script:
+    //int FarmLoop = 0;
+    //int SavedState = 0;
 
-        startFarmLoop:
-            if (FarmLoop > 0) goto maintainFarmLoop;
-            SavedState += 1;
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Started Farming Loop {SavedState}.");
-            goto maintainFarmLoop;
+    startFarmLoop:
+        if (FarmLoop > 0) goto maintainFarmLoop;
+        SavedState += 1;
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Started Farming Loop {SavedState}.");
+        goto maintainFarmLoop;
 
-        breakFarmLoop:
-            SmartSaveState(MapNumber);
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
-            FarmLoop = 0;
-            goto startFarmLoop;
+    breakFarmLoop:
+        SmartSaveState(MapNumber);
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
+        FarmLoop = 0;
+        goto startFarmLoop;
 
-        maintainFarmLoop:
-            while (!bot.Inventory.ContainsTempItem(TempItemName, TempItemQuantity))
-            {
-                FarmLoop += 1;
-                if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
-                if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
-                bot.Quests.EnsureAccept(QuestID);
-                bot.Options.AggroMonsters = true;
-                bot.Player.Attack(MonsterName);
-                if (FarmLoop > 8700) goto breakFarmLoop;
-            }
+    maintainFarmLoop:
+        while (!bot.Inventory.ContainsTempItem(TempItemName, TempItemQuantity))
+        {
+            FarmLoop += 1;
+            if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+            if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+            bot.Quests.EnsureAccept(QuestID);
+            bot.Options.AggroMonsters = true;
+            bot.Player.Attack(MonsterName);
+            if (FarmLoop > 8700) goto breakFarmLoop;
+        }
     }
 
     public void SafeEquip(string ItemName)
@@ -165,7 +164,7 @@ public class Script
     public void SafeSell(string ItemName, int ItemQuantityNeeded)
     {
         //Sells the specified item until you have the specified quantity.
-        
+
         //Must have the following functions in your script:
         //ExitCombat
 
@@ -179,28 +178,27 @@ public class Script
 
     public void SafeQuestComplete(int QuestID, int ItemID = -1)
     {
-        //Attempts to complete the quest thrice. If it fails to complete, logs out. If it successfully completes, re-accepts the quest and checks if it can be completed again.
+    //Attempts to complete the quest thrice. If it fails to complete, logs out. If it successfully completes, re-accepts the quest and checks if it can be completed again.
 
-        //Must have the following functions in your script:
-        //ExitCombat
+    //Must have the following functions in your script:
+    //ExitCombat
 
-        //Must have the following command under public class Script:
-        //int QuestCounter = 0;
+    //Must have the following command under public class Script:
+    //int QuestCounter = 0;
 
-        maintainCompleteLoop:
-            ExitCombat();
-            bot.Quests.EnsureAccept(QuestID);
-            bot.Quests.EnsureComplete(QuestID, ItemID, false, 3);
-            if (bot.Quests.IsInProgress(QuestID))
-            {
-                bot.Log($"[{DateTime.Now:HH:mm:ss}] Failed to turn in Quest {QuestID}. Logging out.");
-                bot.Player.Logout();
-            }
-            QuestCounter += 1;
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Turned In Quest {QuestID} successfully {QuestCounter} time(s).");
-            bot.Quests.EnsureAccept(QuestID);
-            bot.Sleep(700);
-            if (bot.Quests.CanComplete(QuestID)) goto maintainCompleteLoop;
+    maintainCompleteLoop:
+        ExitCombat();
+        bot.Quests.EnsureAccept(QuestID);
+        bot.Quests.EnsureComplete(QuestID, ItemID, false, 3);
+        if (bot.Quests.IsInProgress(QuestID))
+        {
+            bot.Log($"[{DateTime.Now:HH:mm:ss}] Failed to turn in Quest {QuestID}. Logging out.");
+            bot.Player.Logout();
+        }
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Turned In Quest {QuestID} successfully.");
+        bot.Quests.EnsureAccept(QuestID);
+        bot.Sleep(1000);
+        if (bot.Quests.CanComplete(QuestID)) goto maintainCompleteLoop;
     }
 
     public void StopBot(string MapName = "yulgar", string MapNumber = "2142069", string CellName = "Enter", string PadName = "Spawn")
@@ -284,7 +282,7 @@ public class Script
     public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/")
     {
         //Recommended Default Bot Configurations.
-        
+
         bot.Options.CustomName = PlayerName;
         bot.Options.CustomGuild = GuildName;
         bot.Options.LagKiller = true;
@@ -325,7 +323,7 @@ public class Script
     public void GetDropList(params string[] GetDropList)
     {
         //Checks if items in an array have dropped every second and picks them up if so. GetDropList is recommended.
-        
+
         bot.RegisterHandler(4, b => {
             foreach (string Item in GetDropList)
             {
@@ -337,7 +335,7 @@ public class Script
     public void ItemWhiteList(params string[] WhiteList)
     {
         //Pick up items in an array when they dropped. May fail to pick up items that drop immediately after the same item is picked up. GetDropList is preferable instead.
-        
+
         foreach (var Item in WhiteList)
         {
             bot.Drops.Add(Item);
