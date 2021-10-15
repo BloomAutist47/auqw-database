@@ -3,12 +3,12 @@ using RBot;
 using System.Collections.Generic;
 public class Script
 {
-    //Make sure to Turn OFF "Reaccept Quests Upon Turnin" and Turn ON "Auto Untarget Dead Targets" + "Auto Untarget Self" from Advanced Settings in AQW.
-
+    //-----------EDIT ABOVE-------------//
+    public string mapNumber = "69699";
     public string[] RequiredItems = { };
     public string[] EquippedItems = { };
-    
     int[] skillOrder = { 3, 1, 2, 4 };
+    //-----------EDIT ABOVE-------------//
 
     int FarmLoop = 0;
     int SavedState = 0;
@@ -18,7 +18,10 @@ public class Script
     {
         while (bot.Player.Loaded != true) { }
         if (bot.Player.Cell != "Wait") bot.Player.Jump("Wait", "Spawn");
-        ConfigureOptions();
+        
+        ConfigureBotOptions();
+        ConfigureLiteSettings();
+
         SkillList(skillOrder);
         EquipList(EquippedItems);
         UnbankList(RequiredItems);
@@ -43,13 +46,13 @@ public class Script
     //InvItemFarm and TempItemFarm will require some Background Functions to be present as well.
     //All of this information can be found inside the functions. Make sure to read.
 
-    public void InvItemFarm(string itemName, int itemQuantity, string mapName, string mapNumber, string cellName, string padName, int questID, string monsterName)
+    public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID, string MonsterName)
     {
         //Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
         
         //Must have the following functions in your script:
         //SafeMapJoin
-        //SaveState
+        //SmartSaveState
         //SkillList
         //ExitCombat
         //GetDropList OR ItemWhitelist
@@ -65,31 +68,31 @@ public class Script
             goto maintainFarmLoop;
 
         breakFarmLoop:
-            SaveState();
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Saved State {SavedState} time(s).");
+            SmartSaveState(mapNumber);
+            bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
             FarmLoop = 0;
             goto startFarmLoop;
 
         maintainFarmLoop:
-            while (!bot.Inventory.Contains(itemName, itemQuantity))
+            while (!bot.Inventory.Contains(ItemName, ItemQuantity))
             {
-                if (bot.Map.Name != mapName) SafeMapJoin(mapName, mapNumber, cellName, padName);
-                if (bot.Player.Cell != cellName) bot.Player.Jump(cellName, padName);
-                bot.Quests.EnsureAccept(questID);
-                bot.Options.AggroMonsters = true;
-                bot.Player.Attack(monsterName);
                 FarmLoop += 1;
+                if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+                if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+                bot.Quests.EnsureAccept(QuestID);
+                bot.Options.AggroMonsters = true;
+                bot.Player.Attack(MonsterName);
                 if (FarmLoop > 8700) goto breakFarmLoop;
             }
     }
 
-    public void TempItemFarm(string tempName, int tempQuantity, string mapName, string mapNumber, string cellName, string padName, int questID, string monsterName)
+    public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID, string MonsterName)
     {
         //Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location.
 
         //Must have the following functions in your script:
         //SafeMapJoin
-        //SaveState
+        //SmartSaveState
         //ExitCombat
         //SkillList
         //GetDropList OR ItemWhitelist
@@ -105,39 +108,39 @@ public class Script
             goto maintainFarmLoop;
 
         breakFarmLoop:
-            SaveState();
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Saved State {SavedState} time(s).");
+            SmartSaveState(mapNumber);
+            bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
             FarmLoop = 0;
             goto startFarmLoop;
 
         maintainFarmLoop:
-            while (!bot.Inventory.ContainsTempItem(tempName, tempQuantity))
+            while (!bot.Inventory.ContainsTempItem(TempItemName, TempItemQuantity))
             {
-                if (bot.Map.Name != mapName) SafeMapJoin(mapName, mapNumber, cellName, padName);
-                if (bot.Player.Cell != cellName) bot.Player.Jump(cellName, padName);
-                bot.Quests.EnsureAccept(questID);
-                bot.Options.AggroMonsters = true;
-                bot.Player.Attack(monsterName);
                 FarmLoop += 1;
+                if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+                if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+                bot.Quests.EnsureAccept(QuestID);
+                bot.Options.AggroMonsters = true;
+                bot.Player.Attack(MonsterName);
                 if (FarmLoop > 8700) goto breakFarmLoop;
             }
     }
 
-    public void SafeEquip(string itemName)
+    public void SafeEquip(string ItemName)
     {
         //Equips an item.
 
         //Must have the following functions in your script:
         //ExitCombat
 
-        while (!bot.Inventory.IsEquipped(itemName))
+        while (!bot.Inventory.IsEquipped(ItemName))
         {
             ExitCombat();
-            bot.Player.EquipItem(itemName);
+            bot.Player.EquipItem(ItemName);
         }
     }
 
-    public void SafePurchase(string itemName, int itemQuantityNeeded, string mapName, string mapNumber, int shopID)
+    public void SafePurchase(string ItemName, int ItemQuantityNeeded, string MapName, string MapNumber, int ShopID)
     {
         //Purchases the specified quantity of the specified item from the specified shop in the specified map. 
 
@@ -145,36 +148,36 @@ public class Script
         //SafeMapJoin
         //ExitCombat
 
-        while (!bot.Inventory.Contains(itemName, itemQuantityNeeded))
+        while (!bot.Inventory.Contains(ItemName, ItemQuantityNeeded))
         {
-            if (bot.Map.Name != mapName) SafeMapJoin(mapName, mapNumber, "Wait", "Spawn");
+            if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, "Wait", "Spawn");
             ExitCombat();
             if (bot.Shops.IsShopLoaded != true)
             {
-                bot.Shops.Load(shopID);
-                bot.Log($"[{DateTime.Now:HH:mm:ss}] Loaded Shop {shopID}.");
+                bot.Shops.Load(ShopID);
+                bot.Log($"[{DateTime.Now:HH:mm:ss}] Loaded Shop {ShopID}.");
             }
-            bot.Shops.BuyItem(itemName);
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Purchased {itemName} from Shop {shopID}.");
+            bot.Shops.BuyItem(ItemName);
+            bot.Log($"[{DateTime.Now:HH:mm:ss}] Purchased {ItemName} from Shop {ShopID}.");
         }
     }
 
-    public void SafeSell(string itemName, int itemQuantityNeeded)
+    public void SafeSell(string ItemName, int ItemQuantityNeeded)
     {
         //Sells the specified item until you have the specified quantity.
         
         //Must have the following functions in your script:
         //ExitCombat
 
-        int sellingPoint = itemQuantityNeeded + 1;
-        while (bot.Inventory.Contains(itemName, sellingPoint))
+        int sellingPoint = ItemQuantityNeeded + 1;
+        while (bot.Inventory.Contains(ItemName, sellingPoint))
         {
             ExitCombat();
-            bot.Shops.SellItem(itemName);
+            bot.Shops.SellItem(ItemName);
         }
     }
 
-    public void SafeQuestComplete(int questID, int itemID = -1)
+    public void SafeQuestComplete(int QuestID, int ItemID = -1)
     {
         //Attempts to complete the quest thrice. If it fails to complete, logs out. If it successfully completes, re-accepts the quest and checks if it can be completed again.
 
@@ -186,21 +189,21 @@ public class Script
 
         maintainCompleteLoop:
             ExitCombat();
-            bot.Quests.EnsureAccept(questID);
-            bot.Quests.EnsureComplete(questID, itemID, false, 3);
-            if (bot.Quests.IsInProgress(questID))
+            bot.Quests.EnsureAccept(QuestID);
+            bot.Quests.EnsureComplete(QuestID, ItemID, false, 3);
+            if (bot.Quests.IsInProgress(QuestID))
             {
-                bot.Log($"[{DateTime.Now:HH:mm:ss}] Failed to turn in Quest {questID}. Logging out.");
+                bot.Log($"[{DateTime.Now:HH:mm:ss}] Failed to turn in Quest {QuestID}. Logging out.");
                 bot.Player.Logout();
             }
             QuestCounter += 1;
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Turned In Quest {questID} successfully {QuestCounter} time(s).");
-            bot.Quests.EnsureAccept(questID);
+            bot.Log($"[{DateTime.Now:HH:mm:ss}] Turned In Quest {QuestID} successfully {QuestCounter} time(s).");
+            bot.Quests.EnsureAccept(QuestID);
             bot.Sleep(700);
-            if (bot.Quests.CanComplete(questID)) goto maintainCompleteLoop;
+            if (bot.Quests.CanComplete(QuestID)) goto maintainCompleteLoop;
     }
 
-    public void StopBot(string mapName = "yulgar", string mapNumber = "2142069", string cellName = "Enter", string padName = "Spawn")
+    public void StopBot(string MapName = "yulgar", string MapNumber = "2142069", string CellName = "Enter", string PadName = "Spawn")
     {
         //Stops the bot at yulgar if no parameters are set, or your specified map if the parameters are set.
 
@@ -208,11 +211,12 @@ public class Script
         //SafeMapJoin
         //ExitCombat
 
-        if (bot.Map.Name != mapName) SafeMapJoin(mapName, mapNumber, cellName, padName);
-        if (bot.Player.Cell != cellName) bot.Player.Jump(cellName, padName);
+        if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+        if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
         bot.Drops.RejectElse = false;
         bot.Options.LagKiller = false;
         bot.Options.AggroMonsters = false;
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Bot stopped successfully.");
         bot.Exit();
     }
 
@@ -233,7 +237,7 @@ public class Script
         while (bot.Player.State == 2) { }
     }
 
-    public void SaveState()
+    public void SmartSaveState(string MapNumber = "2142069")
     {
         //Creates a quick Save State by joining a private /yulgar.
 
@@ -241,24 +245,31 @@ public class Script
         //SafeMapJoin
         //ExitCombat
 
-        ExitCombat();
-        SafeMapJoin("yulgar", "2142069", "Enter", "Spawn");
+        string CurrentMap = bot.Map.Name;
+        string CurrentCell = bot.Player.Cell;
+        string CurrentPad = bot.Player.Pad;
+        if (bot.Map.Name != "yulgar") SafeMapJoin("yulgar", "2142069", "Enter", "Spawn");
+        else SafeMapJoin("tavern", "2142069", "Enter", "Spawn");
+        SafeMapJoin(CurrentMap, MapNumber, CurrentCell, CurrentPad);
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Successfully Saved State.");
     }
 
-    public void SafeMapJoin(string mapName, string mapNumber, string cellName, string padName)
+    public void SafeMapJoin(string MapName, string MapNumber, string CellName, string PadName)
     {
         //Joins the specified map.
 
         //Must have the following functions in your script:
         //ExitCombat
 
-        maintainJoinLoop:
+        while (bot.Map.Name != MapName)
+        {
             ExitCombat();
-            bot.Player.Join($"{mapName}-{mapNumber}", cellName, padName);
-            bot.Wait.ForMapLoad(mapName);
-            if (bot.Map.Name != mapName) goto maintainJoinLoop;
-            if (bot.Player.Cell != cellName) bot.Player.Jump(cellName, padName);
-            bot.Log($"[{DateTime.Now:HH:mm:ss}] Joined map {mapName}-{mapNumber}, positioned at the {padName} side of cell {cellName}.");
+            bot.Player.Join($"{MapName}-{MapNumber}", CellName, PadName);
+            bot.Wait.ForMapLoad(MapName);
+            bot.Sleep(500);
+        }
+        if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Joined map {MapName}-{MapNumber}, positioned at the {PadName} side of cell {CellName}.");
     }
 
     /*------------------------------------------------------------------------------------------------------------
@@ -268,13 +279,14 @@ public class Script
     //These functions help you to either configure certain settings or run event handlers in the background.
     //It is highly recommended to have all these functions present in your script as they are very useful.
     //Some Invocable Functions may call or require the assistance of some Background Functions as well.
+    //These functions are to be run at the very beginning of the bot under public class Script.
 
-    public void ConfigureOptions(string playerName = "Bot By AuQW", string guildName = "https://auqw.tk/")
+    public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/")
     {
         //Recommended Default Bot Configurations.
         
-        bot.Options.CustomName = playerName;
-        bot.Options.CustomGuild = guildName;
+        bot.Options.CustomName = PlayerName;
+        bot.Options.CustomGuild = GuildName;
         bot.Options.LagKiller = true;
         bot.Options.SafeTimings = true;
         bot.Options.RestPackets = true;
@@ -286,6 +298,15 @@ public class Script
         bot.Events.PlayerAFK += b => { ScriptManager.RestartScript(); };
     }
 
+    public void ConfigureLiteSettings()
+    {
+        bot.Lite.Set("bUntargetSelf", true);
+        bot.Lite.Set("bUntargetDead", true);
+        bot.Lite.Set("bCustomDrops", false);
+        bot.Lite.Set("bReaccept", false);
+        bot.Lite.Set("bSmoothBG", true);
+    }
+
     public void SkillList(params int[] Skillset)
     {
         //Spams Skills when in combat. You can get in combat by going to a cell with monsters in it with bot.Options.AggroMonsters enabled or using an attack command against one. 
@@ -293,9 +314,9 @@ public class Script
         bot.RegisterHandler(1, b => {
             if (bot.Player.InCombat == true)
             {
-                foreach (var skill in Skillset)
+                foreach (var Skill in Skillset)
                 {
-                    bot.Player.UseSkill(skill);
+                    bot.Player.UseSkill(Skill);
                 }
             }
         });
