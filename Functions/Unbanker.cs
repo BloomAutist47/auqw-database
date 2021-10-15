@@ -1,4 +1,8 @@
-// Unbanker.cs by Bloom
+/*  Filename: Unbanker.cs
+    Author: Bloom
+    Summary: Banks  all misc AC Items and unbanks all your required stuffs.
+*/
+
 
 using RBot;
 using System;
@@ -60,6 +64,6 @@ public class Script {
 
 
 
-	
+
 
 }
