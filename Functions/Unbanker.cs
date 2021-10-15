@@ -39,8 +39,8 @@ public class Script {
 	public void Unbank(bool AddToDrops, params string[] Items) {
 		
 		// Moves Player to safezone in case in combat
-		if (Bot.Player.Cell != "Wait") Bot.Player.Jump("Wait", "Spawn");
-		while (Bot.Player.State == 2) {}
+		if (bot.Player.Cell != "Wait") bot.Player.Jump("Wait", "Spawn");
+		while (bot.Player.State == 2) {}
 
 		// Loads bank
 		bot.Player.LoadBank();
