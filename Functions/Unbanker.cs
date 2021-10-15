@@ -3,8 +3,6 @@
 using RBot;
 using System;
 
-
-
 public class Script {
 	public ScriptInterface bot => ScriptInterface.Instance;
 	public void ScriptMain(ScriptInterface bot){
@@ -25,19 +23,11 @@ public class Script {
 			   "Draco War Medal",
 			   "Slayer Helm");
 
-
 		// if you use drop list, don't forget to declare these:
 		bot.Drops.RejectElse = true;
 		bot.Drops.Start();
 
 	}
-
-
-
-
-
-
-
 
 	/// <summary> Banks all Misc AC items and unbanks your required items. By Bloom</summary>
 	/// <param name="Items">Items you want to unbank</param>
@@ -69,5 +59,7 @@ public class Script {
 	}
 
 
+
+	
 
 }
