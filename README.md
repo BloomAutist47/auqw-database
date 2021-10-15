@@ -1,13 +1,12 @@
 # AuQW Database
-***
 This is the AutoQuest Worlds Information Database, Primarily consisting of RBot Infos. We place useful functions here that we coded ourselves. Feel free to use them.
 
-- [General Info](##General Info)
+- [General Info](##General)
 
 
 
-***
-## General Info
+
+## General
 RBot Client: [Link](https://github.com/rodit/RBot/releases/)
 RBot Docs: [Link](https://rodit.github.io/rbot-scripts/)
 RBot Source Code: [Link](https://github.com/rodit/RBot)
