@@ -67,7 +67,11 @@ public class Script {
 
     public void ExitCombat() {
         // Moves Player to safezone in case in combat
-        if (bot.Player.State == 2) bot.Player.Jump("Wait", "Spawn");
+        if (bot.Player.State == 2) {
+            if (bot.Player.Cell != "Wait"){
+                bot.Player.Jump("Wait", "Spawn");
+            }
+        }
         while (bot.Player.State == 2) {}
     }
 
