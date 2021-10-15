@@ -4,10 +4,10 @@ using System.Collections.Generic;
 public class Script
 {
     //-----------EDIT ABOVE-------------//
-    public string mapNumber = "69699";
+    public string MapNumber = "69699";
     public string[] RequiredItems = { };
     public string[] EquippedItems = { };
-    int[] skillOrder = { 3, 1, 2, 4 };
+    int[] SkillOrder = { 3, 1, 2, 4 };
     //-----------EDIT ABOVE-------------//
 
     int FarmLoop = 0;
@@ -22,7 +22,7 @@ public class Script
         ConfigureBotOptions();
         ConfigureLiteSettings();
 
-        SkillList(skillOrder);
+        SkillList(SkillOrder);
         EquipList(EquippedItems);
         UnbankList(RequiredItems);
         GetDropList(RequiredItems);
@@ -68,7 +68,7 @@ public class Script
             goto maintainFarmLoop;
 
         breakFarmLoop:
-            SmartSaveState(mapNumber);
+            SmartSaveState(MapNumber);
             bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
             FarmLoop = 0;
             goto startFarmLoop;
@@ -108,7 +108,7 @@ public class Script
             goto maintainFarmLoop;
 
         breakFarmLoop:
-            SmartSaveState(mapNumber);
+            SmartSaveState(MapNumber);
             bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
             FarmLoop = 0;
             goto startFarmLoop;
