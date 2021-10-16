@@ -259,6 +259,11 @@ public class Script
         while (bot.Map.Name != MapName)
         {
             ExitCombat();
+            if (MapName == "tercessuinotlim")
+            {
+                if (bot.Map.Name != "citadel") SafeMapJoin("citadel", MapNumber, "m22", "Left");
+                if (bot.Player.Cell != "m22") bot.Player.Jump("m22", "Left");
+            }
             bot.Player.Join($"{MapName}-{MapNumber}", CellName, PadName);
             bot.Wait.ForMapLoad(MapName);
             bot.Sleep(500);
