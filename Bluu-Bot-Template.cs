@@ -36,15 +36,16 @@ public class Script
     }
 
     /*------------------------------------------------------------------------------------------------------------
-                                                     Invocable Functions
+                                                     Invokable Functions
     ------------------------------------------------------------------------------------------------------------*/
 
     //These functions are used to perform a major action in AQW. 
-    //All of them require at least one of the Auxilliary Functions listed below to be present in your script.
+    //All of them require at least one of the Auxiliary Functions listed below to be present in your script.
     //Some of the functions require you to pre-declare certain integers under "public class Script"
     //InvItemFarm and TempItemFarm will require some Background Functions to be present as well.
     //All of this information can be found inside the functions. Make sure to read.
 
+    //InvItemFarm("ItemName", ItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName")
     public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
     {
     //Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
@@ -85,6 +86,7 @@ public class Script
         }
     }
 
+    //TempItemFarm("TempItemName", TempItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName")
     public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
     {
     //Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location.
@@ -125,6 +127,7 @@ public class Script
         }
     }
 
+    //SafeEquip("ItemName")
     public void SafeEquip(string ItemName)
     {
         //Equips an item.
@@ -139,6 +142,7 @@ public class Script
         }
     }
 
+    //SafePurchase("ItemName", ItemQuantityNeeded, "MapName", "MapNumber", ShopID)
     public void SafePurchase(string ItemName, int ItemQuantityNeeded, string MapName, string MapNumber, int ShopID)
     {
         //Purchases the specified quantity of the specified item from the specified shop in the specified map. 
@@ -161,6 +165,7 @@ public class Script
         }
     }
 
+    //SafeSell("ItemName", ItemQuantityNeeded)
     public void SafeSell(string ItemName, int ItemQuantityNeeded)
     {
         //Sells the specified item until you have the specified quantity.
@@ -176,6 +181,7 @@ public class Script
         }
     }
 
+    //SafeQuestComplete(QuestID, ItemID)
     public void SafeQuestComplete(int QuestID, int ItemID = -1)
     {
     //Attempts to complete the quest thrice. If it fails to complete, logs out. If it successfully completes, re-accepts the quest and checks if it can be completed again.
@@ -198,6 +204,7 @@ public class Script
         if (bot.Quests.CanComplete(QuestID)) goto maintainCompleteLoop;
     }
 
+    //StopBot ("MapName", "MapNumber", "CellName", "PadName")
     public void StopBot(string MapName = "yulgar", string MapNumber = "2142069", string CellName = "Enter", string PadName = "Spawn")
     {
         //Stops the bot at yulgar if no parameters are set, or your specified map if the parameters are set.
@@ -216,13 +223,14 @@ public class Script
     }
 
     /*------------------------------------------------------------------------------------------------------------
-                                                    Auxilliary Functions
+                                                    Auxiliary Functions
     ------------------------------------------------------------------------------------------------------------*/
 
     //These functions are used to perform small actions in AQW.
-    //They are usually called upon by the Invocable Functions, but can be used separately as well.
-    //Make sure to have them loaded if your Invocable Function states that they are required.
+    //They are usually called upon by the Invokable Functions, but can be used separately as well.
+    //Make sure to have them loaded if your Invokable Function states that they are required.
 
+    //ExitCombat()
     public void ExitCombat()
     {
         //Exits Combat.
@@ -232,6 +240,7 @@ public class Script
         while (bot.Player.State == 2) { }
     }
 
+    //SmartSaveState("MapNumber")
     public void SmartSaveState(string MapNumber = "2142069")
     {
         //Creates a quick Save State by joining a private /yulgar.
@@ -249,6 +258,7 @@ public class Script
         bot.Log($"[{DateTime.Now:HH:mm:ss}] Successfully Saved State.");
     }
 
+    //SafeMapJoin("MapName", "MapNumber:, "CellName", "PadName")
     public void SafeMapJoin(string MapName, string MapNumber, string CellName, string PadName)
     {
         //Joins the specified map.
@@ -283,7 +293,7 @@ public class Script
 
     //These functions help you to either configure certain settings or run event handlers in the background.
     //It is highly recommended to have all these functions present in your script as they are very useful.
-    //Some Invocable Functions may call or require the assistance of some Background Functions as well.
+    //Some Invokable Functions may call or require the assistance of some Background Functions as well.
     //These functions are to be run at the very beginning of the bot under public class Script.
 
     public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/")
