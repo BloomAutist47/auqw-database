@@ -45,7 +45,7 @@ public class Script
     //InvItemFarm and TempItemFarm will require some Background Functions to be present as well.
     //All of this information can be found inside the functions. Make sure to read.
 
-    public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID, string MonsterName)
+    public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
     {
     //Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
 
@@ -85,7 +85,7 @@ public class Script
         }
     }
 
-    public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID, string MonsterName)
+    public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
     {
     //Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location.
 
