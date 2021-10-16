@@ -291,6 +291,7 @@ public class Script
         bot.Options.AutoRelogin = true;
         bot.Options.PrivateRooms = false;
         bot.Options.InfiniteRange = true;
+        bot.Options.SkipCutscenes = true;
         bot.Options.ExitCombatBeforeQuest = true;
         bot.Events.PlayerDeath += b => { ScriptManager.RestartScript(); };
         bot.Events.PlayerAFK += b => { ScriptManager.RestartScript(); };
