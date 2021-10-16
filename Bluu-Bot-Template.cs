@@ -183,9 +183,6 @@ public class Script
     //Must have the following functions in your script:
     //ExitCombat
 
-    //Must have the following command under public class Script:
-    //int QuestCounter = 0;
-
     maintainCompleteLoop:
         ExitCombat();
         bot.Quests.EnsureAccept(QuestID);
