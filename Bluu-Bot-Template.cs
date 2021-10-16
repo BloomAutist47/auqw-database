@@ -46,7 +46,7 @@ public class Script
     //All of this information can be found inside the functions. Make sure to read.
 
     //InvItemFarm("ItemName", ItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName")
-    public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
+    public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
     {
     //Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
 
@@ -68,7 +68,7 @@ public class Script
         goto maintainFarmLoop;
 
     breakFarmLoop:
-        SmartSaveState(MapNumber);
+        SmartSaveState();
         bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
         FarmLoop = 0;
         goto startFarmLoop;
@@ -77,7 +77,7 @@ public class Script
         while (!bot.Inventory.Contains(ItemName, ItemQuantity))
         {
             FarmLoop += 1;
-            if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+            if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
             if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
             bot.Quests.EnsureAccept(QuestID);
             bot.Options.AggroMonsters = true;
@@ -87,7 +87,7 @@ public class Script
     }
 
     //TempItemFarm("TempItemName", TempItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName")
-    public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string MapNumber, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
+    public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string CellName, string PadName, int QuestID = 1, string MonsterName = "*")
     {
     //Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location.
 
@@ -109,7 +109,7 @@ public class Script
         goto maintainFarmLoop;
 
     breakFarmLoop:
-        SmartSaveState(MapNumber);
+        SmartSaveState();
         bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
         FarmLoop = 0;
         goto startFarmLoop;
@@ -118,7 +118,7 @@ public class Script
         while (!bot.Inventory.ContainsTempItem(TempItemName, TempItemQuantity))
         {
             FarmLoop += 1;
-            if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+            if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
             if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
             bot.Quests.EnsureAccept(QuestID);
             bot.Options.AggroMonsters = true;
@@ -143,7 +143,7 @@ public class Script
     }
 
     //SafePurchase("ItemName", ItemQuantityNeeded, "MapName", "MapNumber", ShopID)
-    public void SafePurchase(string ItemName, int ItemQuantityNeeded, string MapName, string MapNumber, int ShopID)
+    public void SafePurchase(string ItemName, int ItemQuantityNeeded, string MapName, int ShopID)
     {
         //Purchases the specified quantity of the specified item from the specified shop in the specified map. 
 
@@ -153,7 +153,7 @@ public class Script
 
         while (!bot.Inventory.Contains(ItemName, ItemQuantityNeeded))
         {
-            if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, "Wait", "Spawn");
+            if (bot.Map.Name != MapName) SafeMapJoin(MapName, "Wait", "Spawn");
             ExitCombat();
             if (bot.Shops.IsShopLoaded != true)
             {
@@ -205,7 +205,7 @@ public class Script
     }
 
     //StopBot ("MapName", "MapNumber", "CellName", "PadName")
-    public void StopBot(string MapName = "yulgar", string MapNumber = "2142069", string CellName = "Enter", string PadName = "Spawn")
+    public void StopBot(string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn")
     {
         //Stops the bot at yulgar if no parameters are set, or your specified map if the parameters are set.
 
@@ -213,7 +213,7 @@ public class Script
         //SafeMapJoin
         //ExitCombat
 
-        if (bot.Map.Name != MapName) SafeMapJoin(MapName, MapNumber, CellName, PadName);
+        if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
         if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
         bot.Drops.RejectElse = false;
         bot.Options.LagKiller = false;
@@ -241,7 +241,7 @@ public class Script
     }
 
     //SmartSaveState("MapNumber")
-    public void SmartSaveState(string MapNumber = "2142069")
+    public void SmartSaveState()
     {
         //Creates a quick Save State by joining a private /yulgar.
 
@@ -252,14 +252,14 @@ public class Script
         string CurrentMap = bot.Map.Name;
         string CurrentCell = bot.Player.Cell;
         string CurrentPad = bot.Player.Pad;
-        if (bot.Map.Name != "yulgar") SafeMapJoin("yulgar", "2142069", "Enter", "Spawn");
-        else SafeMapJoin("tavern", "2142069", "Enter", "Spawn");
-        SafeMapJoin(CurrentMap, MapNumber, CurrentCell, CurrentPad);
+        if (bot.Map.Name != "yulgar") SafeMapJoin("yulgar", "Enter", "Spawn");
+        else SafeMapJoin("tavern", "Enter", "Spawn");
+        SafeMapJoin(CurrentMap, CurrentCell, CurrentPad);
         bot.Log($"[{DateTime.Now:HH:mm:ss}] Successfully Saved State.");
     }
 
     //SafeMapJoin("MapName", "MapNumber:, "CellName", "PadName")
-    public void SafeMapJoin(string MapName, string MapNumber, string CellName, string PadName)
+    public void SafeMapJoin(string MapName, string CellName, string PadName)
     {
         //Joins the specified map.
 
