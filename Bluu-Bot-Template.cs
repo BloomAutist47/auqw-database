@@ -206,7 +206,7 @@ public class Script
         if (bot.Quests.CanComplete(QuestID)) goto maintainCompleteLoop;
     }
 
-    //StopBot ("MapName", "MapNumber", "CellName", "PadName")
+    //StopBot ("Text", "MapName", "MapNumber", "CellName", "PadName")
     public void StopBot(string Text = "Bot stopped successfully.", string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn")
     {
         //Stops the bot at yulgar if no parameters are set, or your specified map if the parameters are set.
