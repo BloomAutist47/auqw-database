@@ -1,6 +1,7 @@
 using System;
 using RBot;
 using System.Collections.Generic;
+using System.Windows.Forms;
 public class Script
 {
     //-----------EDIT BELOW-------------//
@@ -206,7 +207,7 @@ public class Script
     }
 
     //StopBot ("MapName", "MapNumber", "CellName", "PadName")
-    public void StopBot(string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn")
+    public void StopBot(string Text = "Bot stopped successfully.", string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn")
     {
         //Stops the bot at yulgar if no parameters are set, or your specified map if the parameters are set.
 
@@ -220,6 +221,8 @@ public class Script
         bot.Options.LagKiller = false;
         bot.Options.AggroMonsters = false;
         bot.Log($"[{DateTime.Now:HH:mm:ss}] Bot stopped successfully.");
+        Console.WriteLine(Text);
+        MessageBox.Show(Text);
         bot.Exit();
     }
 
