@@ -11,6 +11,7 @@ public class BluuTemplate
 	public string[] EquippedItems = { };
 	public readonly int[] SkillOrder = { 3, 1, 2, 4 };
 	public int SaveStateLoops = 8700;
+	public int TurnInAttempts = 3;
 	//-----------EDIT ABOVE-------------//
 
 	public int FarmLoop;
@@ -214,7 +215,7 @@ public class BluuTemplate
 	maintainCompleteLoop:
 		ExitCombat();
 		bot.Quests.EnsureAccept(QuestID);
-		bot.Quests.EnsureComplete(QuestID, ItemID, tries: 3);
+		bot.Quests.EnsureComplete(QuestID, ItemID, tries: TurnInAttempts);
 		if (bot.Quests.IsInProgress(QuestID))
 		{
 			bot.Log($"[{DateTime.Now:HH:mm:ss}] Failed to turn in Quest {QuestID}. Logging out.");
