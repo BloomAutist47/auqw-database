@@ -25,13 +25,19 @@ public class Script{
             return mapNumber;
         }
         else{
-            int mapNoInt = Integer.parseInt(mapNumber);
-            if(mapNoInt > 99999){
-                mapNoInt = randomDigits;
-                mapNumber = mapNoInt.ToString();
+            try{
+                int mapNoInt = Integer.parseInt(mapNumber);
+                if(mapNoInt > 99999){
+                    mapNoInt = randomDigits;
+                    mapNumber = mapNoInt.ToString();
+                    return mapNumber;
+                }          
                 return mapNumber;
-            }          
-            return mapNumber;
+            }
+            catch(NumberFormatException ex){
+                ex.printStackTrace();
+                return mapNumber;
+            }
         }
     }
 }
