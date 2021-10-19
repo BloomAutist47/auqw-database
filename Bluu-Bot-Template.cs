@@ -266,9 +266,9 @@ public class BluuTemplate
 	/// Exits Combat by jumping cells.
 	/// </summary>
 	public void ExitCombat()
-	{
-		bot.Options.AggroMonsters = false;
-		bot.Player.Jump(bot.Player.Cell, bot.Player.Pad);
+    {
+        bot.Options.AggroMonsters = false;
+		bot.Player.Jump("Wait", "Spawn");
 		while (bot.Player.State == 2) { }
 	}
 
