@@ -17,9 +17,9 @@ public class Script{
     }
 
     public string MapNumberConverter(string mapNumber){
+        Random rnd = new Random();
+        int randomDigits = rnd.Next(1000,99999);
         if(mapNumber=="1e99"){
-            Random rnd = new Random();
-            int randomDigits = rnd.Next(10000,99999);
             string radomDigitsText = randomDigits.ToString();
             mapNumber = radomDigitsText;
             return mapNumber;
