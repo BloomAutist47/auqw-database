@@ -11,7 +11,7 @@ public class BluuTemplate
 	public string[] EquippedItems = { };
 	public readonly int[] SkillOrder = { 3, 1, 2, 4 };
 	public int SaveStateLoops = 8700;
-	public int TurnInAttempts = 3;
+	public int TurnInAttempts = 10;
 	//-----------EDIT ABOVE-------------//
 
 	public int FarmLoop;
