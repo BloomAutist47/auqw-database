@@ -23,7 +23,6 @@ public class BluuTemplate
 	public ScriptInterface bot => ScriptInterface.Instance;
 	public void ScriptMain(ScriptInterface bot)
 	{
-		StopBot();
 		if (bot.Player.Cell != "Wait") bot.Player.Jump("Wait", "Spawn");
 
 		ConfigureBotOptions();
@@ -508,7 +507,10 @@ public class BluuTemplate
 	{
 		foreach (var Item in EquipList)
 		{
-			SafeEquip(Item);
+			if (bot.Inventory.Contains(Item))
+			{
+				SafeEquip(Item);
+			}
 		}
 	}
 
