@@ -280,7 +280,7 @@ public class BluuTemplate
 	/// <summary>
 	/// Joins the specified map.
 	/// </summary>
-	public void SafeMapJoin(string MapName, string CellName, string PadName)
+	public void SafeMapJoin(string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn")
 	{
 		//Must have the following functions in your script:
 		//ExitCombat
