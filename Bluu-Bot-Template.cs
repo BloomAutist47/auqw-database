@@ -2,29 +2,34 @@ using System;
 using RBot;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using RBot.Options;
 
 public class BluuTemplate
 {
 	//-----------EDIT BELOW-------------//
-	public int MapNumber = 2142069;
+	public int MapNumber = ScriptInterface.Instance.Config.Get<int>("RoomNumber");
 	public string[] RequiredItems = { };
 	public string[] EquippedItems = { };
-	public readonly int[] SkillOrder = { 3, 1, 2, 4 };
+	public string[] SFClass = { SoloClass, FarmClass };
+	public readonly int[] SoloSkillOrder = { 3, 1, 2, 4 };
+	public readonly int[] FarmingSkillOrder = { 4, 2, 3, 1 };
 	public int SaveStateLoops = 8700;
 	public int TurnInAttempts = 10;
 	//-----------EDIT ABOVE-------------//
+
 
 	public int FarmLoop;
 	public int SavedState;
 	public ScriptInterface bot => ScriptInterface.Instance;
 	public void ScriptMain(ScriptInterface bot)
 	{
+		StopBot();
 		if (bot.Player.Cell != "Wait") bot.Player.Jump("Wait", "Spawn");
 
 		ConfigureBotOptions();
 		ConfigureLiteSettings();
 
-		SkillList(SkillOrder);
+		SkillList(SoloSkillOrder);
 		EquipList(EquippedItems);
 		UnbankList(RequiredItems);
 		CheckSpace(RequiredItems);
@@ -41,6 +46,21 @@ public class BluuTemplate
 		bot.Log($"[{DateTime.Now:HH:mm:ss}] Script stopped successfully.");
 		StopBot();
 	}
+
+	/*------------------------------------------------------------------------------------------------------------
+															Bot Options
+	------------------------------------------------------------------------------------------------------------*/
+
+	public List<IOption> Options = new List<IOption>()
+	{
+		new Option<int>("RoomNumber","Room Number","Add the desired room number so you can join public/private rooms.", 2142069),
+		new Option<string>("SoloClass","Soloing Class","This will be the class designed to use in solo situations.","Void Highlord"),
+		new Option<string>("FarmClass","Farming Class","This class will be used for farming.","Legion Revenant"),
+		new Option<string>("skillOrder", "Skill Order", "The order of skill execution. Use -> [1, 2, 3, 4, 5, 6] just like the aqw UI skill keys.", "3,4,2,1")
+	};
+
+	public static string SoloClass = ScriptInterface.Instance.Config.Get<string>("SoloClass");
+	public static string FarmClass = ScriptInterface.Instance.Config.Get<string>("FarmClass");
 
 	/*------------------------------------------------------------------------------------------------------------
 													 Invokable Functions
@@ -105,7 +125,7 @@ public class BluuTemplate
 	}
 
 	/// <summary>
-	/// Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location.
+	/// Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
 	/// </summary>
 	public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string CellName, string PadName, int QuestID = 0, string MonsterName = "*")
 	{
@@ -144,6 +164,63 @@ public class BluuTemplate
 			bot.Options.AggroMonsters = true;
 			bot.Player.Attack(MonsterName);
 			if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+		}
+	}
+
+	/// <summary>
+	/// Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
+	/// </summary>
+	public void HuntItemFarm(string ItemName, int ItemQuantity, string MapName, bool Temporary = false, int QuestID = 0, string MonsterName = "*")
+	{
+	/*
+		*   Must have the following functions in your script:
+		*   SafeMapJoin
+		*   SmartSaveState
+		*   SkillList
+		*   ExitCombat
+		*   GetDropList OR ItemWhitelist
+		*
+		*   Must have the following commands under public class Script:
+		*   int FarmLoop = 0;
+		*   int SavedState = 0;
+	*/
+
+	startFarmLoop:
+		if (FarmLoop > 0) goto maintainFarmLoop;
+		SavedState++;
+		bot.Log($"[{DateTime.Now:HH:mm:ss}] Started Farming Loop {SavedState}.");
+		goto maintainFarmLoop;
+
+	breakFarmLoop:
+		SmartSaveState();
+		bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
+		FarmLoop = 0;
+		goto startFarmLoop;
+
+	maintainFarmLoop:
+		if (Temporary)
+		{
+			while(!bot.Inventory.ContainsTempItem(ItemName, ItemQuantity))
+			{
+				FarmLoop++;
+				if (bot.Map.Name != MapName) SafeMapJoin(MapName);
+				if (QuestID > 0) bot.Quests.EnsureAccept(QuestID);
+				bot.Options.AggroMonsters = true;
+				bot.Player.Hunt(MonsterName);
+				if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+			}
+		}
+		else
+		{
+			while (!bot.Inventory.Contains(ItemName, ItemQuantity))
+			{
+				FarmLoop++;
+				if (bot.Map.Name != MapName) SafeMapJoin(MapName);
+				if (QuestID > 0) bot.Quests.EnsureAccept(QuestID);
+				bot.Options.AggroMonsters = true;
+				bot.Player.Hunt(MonsterName);
+				if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+			}
 		}
 	}
 
@@ -232,7 +309,6 @@ public class BluuTemplate
 		//Must have the following functions in your script:
 		//SafeMapJoin
 		//ExitCombat
-
 		if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
 		if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
 		bot.Drops.RejectElse = false;
@@ -280,7 +356,7 @@ public class BluuTemplate
 	/// <summary>
 	/// Joins the specified map.
 	/// </summary>
-	public void SafeMapJoin(string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn")
+	public void SafeMapJoin(string MapName, string CellName = "Enter", string PadName = "Spawn")
 	{
 		//Must have the following functions in your script:
 		//ExitCombat
@@ -330,6 +406,7 @@ public class BluuTemplate
 	/// </summary>
 	public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/", bool LagKiller = true, bool SafeTimings = true, bool RestPackets = true, bool AutoRelogin = true, bool PrivateRooms = false, bool InfiniteRange = true, bool SkipCutscenes = true, bool ExitCombatBeforeQuest = true)
 	{
+		bot.SendClientPacket("%xt%moderator%-1%AuQW: Configuring bot.%");
 		bot.Options.CustomName = PlayerName;
 		bot.Options.CustomGuild = GuildName;
 		bot.Options.LagKiller = LagKiller;
@@ -476,5 +553,17 @@ public class BluuTemplate
 		{
 			StopBot($"Need {SpaceNeeded} empty inventory slots, please make room for the quest.", bot.Map.Name, bot.Player.Cell, bot.Player.Pad, "Error");
 		}
+	}
+
+	/// <summary>
+	/// Sends a message packet to client in chat.
+	/// </summary>
+	/// <param name="Message"></param>
+	/// <param name="Name"></param>
+	/// <param name="MessageType">moderator, warning, server, event, guild, zone, whisper</param>
+	public void SendMSGPacket(string Message = " ", string Name = "SERVER", string MessageType = "zone")
+	{
+		// bot.SendClientPacket($"%xt%{MessageType}%-1%{Name}: {Message}%");
+		bot.SendClientPacket($"%xt%chatm%0%{MessageType}~{Message}%{Name}%");
 	}
 }
