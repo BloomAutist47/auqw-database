@@ -27,6 +27,7 @@ public class BluuTemplate
 		SkillList(SkillOrder);
 		EquipList(EquippedItems);
 		UnbankList(RequiredItems);
+		CheckSpace(RequiredItems);
 		GetDropList(RequiredItems);
 
 		while (!bot.ShouldExit())
@@ -51,8 +52,6 @@ public class BluuTemplate
 		*   Some of the functions require you to pre-declare certain integers under "public class Script"
 		*   InvItemFarm and TempItemFarm will require some Background Functions to be present as well.
 		*   All of this information can be found inside the functions. Make sure to read.
-
-
 		*   InvItemFarm("ItemName", ItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName");
 		*   TempItemFarm("TempItemName", TempItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName");
 		*   SafeEquip("ItemName");
@@ -67,7 +66,6 @@ public class BluuTemplate
 	/// </summary>
 	public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string CellName, string PadName, int QuestID = 0, string MonsterName = "*")
 	{
-
 	/*
 		*   Must have the following functions in your script:
 		*   SafeMapJoin
@@ -111,7 +109,6 @@ public class BluuTemplate
 	/// </summary>
 	public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string CellName, string PadName, int QuestID = 0, string MonsterName = "*")
 	{
-
 	/*
 		*   Must have the following functions in your script:
 		*   SafeMapJoin
@@ -230,7 +227,7 @@ public class BluuTemplate
 	/// <summary>
 	/// Stops the bot at yulgar if no parameters are set, or your specified map if the parameters are set.
 	/// </summary>
-	public void StopBot(string Text = "Bot stopped successfully.", string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn")
+	public void StopBot(string Text = "Bot stopped successfully.", string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn", string Caption = "Stopped")
 	{
 		//Must have the following functions in your script:
 		//SafeMapJoin
@@ -243,8 +240,9 @@ public class BluuTemplate
 		bot.Options.AggroMonsters = false;
 		bot.Log($"[{DateTime.Now:HH:mm:ss}] Bot stopped successfully.");
 		Console.WriteLine(Text);
-		MessageBox.Show(Text);
+		MessageBox.Show(Text, Caption);
 		bot.Exit();
+		ScriptManager.StopScript();
 	}
 
 	/*------------------------------------------------------------------------------------------------------------
@@ -255,8 +253,6 @@ public class BluuTemplate
 		*   These functions are used to perform small actions in AQW.
 		*   They are usually called upon by the Invokable Functions, but can be used separately as well.
 		*   Make sure to have them loaded if your Invokable Function states that they are required.
-
-
 		*   ExitCombat()
 		*   SmartSaveState()
 		*   SafeMapJoin("MapName", "CellName", "PadName")
@@ -266,8 +262,8 @@ public class BluuTemplate
 	/// Exits Combat by jumping cells.
 	/// </summary>
 	public void ExitCombat()
-    {
-        bot.Options.AggroMonsters = false;
+	{
+		bot.Options.AggroMonsters = false;
 		bot.Player.Jump("Wait", "Spawn");
 		while (bot.Player.State == 2) { }
 	}
@@ -319,8 +315,6 @@ public class BluuTemplate
 		*   It is highly recommended to have all these functions present in your script as they are very useful.
 		*   Some Invokable Functions may call or require the assistance of some Background Functions as well.
 		*   These functions are to be run at the very beginning of the bot under public class Script.
-
-
 		*   ConfigureBotOptions("PlayerName", "GuildName", LagKiller, SafeTimings, RestPackets, AutoRelogin, PrivateRooms, InfiniteRange, SkipCutscenes, ExitCombatBeforeQuest)
 		*   ConfigureLiteSettings(UntargetSelf, UntargetDead, CustomDrops, ReacceptQuest, SmoothBackground)
 		*   SkillList(int[])
@@ -351,16 +345,39 @@ public class BluuTemplate
 	}
 
 	/// <summary>
+	/// Gets AQLite Functions
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="optionName"></param>
+	/// <returns></returns>
+	public T GetLite<T>(string optionName)
+	{
+		return bot.GetGameObject<T>($"litePreference.data.{optionName}");
+	}
+
+	/// <summary>
+	/// Sets AQLite Functions
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="optionName"></param>
+	/// <param name="value"></param>
+	public void SetLite<T>(string optionName, T value)
+	{
+		bot.SetGameObject($"litePreference.data.{optionName}", value);
+	}
+
+	/// <summary>
 	/// Allows you to turn on and off AQLite functions.
 	/// Recommended Default Bot Configurations.
 	/// </summary>
-	public void ConfigureLiteSettings(bool UntargetSelf = true, bool UntargetDead = true, bool CustomDrops = false, bool ReacceptQuest = false, bool SmoothBackground = true)
+	public void ConfigureLiteSettings(bool UntargetSelf = true, bool UntargetDead = true, bool CustomDrops = false, bool ReacceptQuest = false, bool SmoothBackground = true, bool Debugger = false)
 	{
-		bot.Lite.Set("bUntargetSelf", UntargetSelf);
-		bot.Lite.Set("bUntargetDead", UntargetDead);
-		bot.Lite.Set("bCustomDrops", CustomDrops);
-		bot.Lite.Set("bReaccept", ReacceptQuest);
-		bot.Lite.Set("bSmoothBG", SmoothBackground);
+		SetLite("bUntargetSelf", UntargetSelf);
+		SetLite("bUntargetDead", UntargetDead);
+		SetLite("bCustomDrops", CustomDrops);
+		SetLite("bReaccept", ReacceptQuest);
+		SetLite("bSmoothBG", SmoothBackground);
+		SetLite("bDebugger", Debugger);
 	}
 
 	/// <summary>
@@ -409,6 +426,7 @@ public class BluuTemplate
 	/// <summary>
 	/// Equips all items in an array.
 	/// </summary>
+	/// <param name="EquipList"></param>
 	public void EquipList(params string[] EquipList)
 	{
 		foreach (var Item in EquipList)
@@ -420,7 +438,8 @@ public class BluuTemplate
 	/// <summary>
 	/// Unbanks all items in an array after banking every other AC-tagged Misc item in the inventory.
 	/// </summary>
-	public void UnbankList(params string[] BankItems)
+	/// <param name="UnbankList"></param>
+	public void UnbankList(params string[] UnbankList)
 	{
 		if (bot.Player.Cell != "Wait") bot.Player.Jump("Wait", "Spawn");
 		while (bot.Player.State == 2) { }
@@ -429,11 +448,33 @@ public class BluuTemplate
 		foreach (var item in bot.Inventory.Items)
 		{
 			if (!Whitelisted.Contains(item.Category.ToString())) continue;
-			if (item.Name != "Treasure Potion" && item.Coins && !Array.Exists(BankItems, x => x == item.Name)) bot.Inventory.ToBank(item.Name);
+			if (item.Name != "Treasure Potion" && item.Coins && !Array.Exists(UnbankList, x => x == item.Name)) bot.Inventory.ToBank(item.Name);
 		}
-		foreach (var item in BankItems)
+		foreach (var item in UnbankList)
 		{
 			if (bot.Bank.Contains(item)) bot.Bank.ToInventory(item);
+		}
+	}
+
+	/// <summary>
+	/// Checks the amount of space you need from an array's length/set amount.
+	/// </summary>
+	/// <param name="UnbankList"></param>
+	public void CheckSpace(params string[] UnbankList)
+	{
+		int MaxSpace = bot.GetGameObject<int>("world.myAvatar.objData.iBagSlots");
+		int FilledSpace = bot.GetGameObject<int>("world.myAvatar.items.length");
+		int EmptySpace = MaxSpace - FilledSpace;
+		int SpaceNeeded = 0;
+
+		foreach (var Item in UnbankList)
+		{
+			if (!bot.Inventory.Contains(Item)) SpaceNeeded++;
+		}
+
+		if (EmptySpace < SpaceNeeded)
+		{
+			StopBot($"Need {SpaceNeeded} empty inventory slots, please make room for the quest.", bot.Map.Name, bot.Player.Cell, bot.Player.Pad, "Error");
 		}
 	}
 }
