@@ -232,7 +232,7 @@ public class BluuTemplate
 		//Must have the following functions in your script:
 		//ExitCombat
 
-		while (!bot.Inventory.IsEquipped(ItemName))
+		while (bot.Inventory.Contains(ItemName) && !bot.Inventory.IsEquipped(ItemName))
 		{
 			ExitCombat();
 			bot.Player.EquipItem(ItemName);
