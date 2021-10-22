@@ -7,11 +7,11 @@ public class BluuTemplate
 {
 	//-----------EDIT BELOW-------------//
 	public int MapNumber = 2142069;
-	public string[] RequiredItems = { };
-	public string[] EquippedItems = { };
 	public readonly int[] SkillOrder = { 3, 1, 2, 4 };
 	public int SaveStateLoops = 8700;
 	public int TurnInAttempts = 10;
+	public string[] EquippedItems = { };
+	public string[] RequiredItems = { };
 	//-----------EDIT ABOVE-------------//
 
 
