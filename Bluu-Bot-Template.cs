@@ -266,8 +266,7 @@ public class BluuTemplate
 	{
 	//Must have the following functions in your script:
 	//ExitCombat
-
-	maintainCompleteLoop:
+	
 		ExitCombat();
 		bot.Quests.EnsureAccept(QuestID);
 		bot.Quests.EnsureComplete(QuestID, ItemID, tries: TurnInAttempts);
@@ -277,9 +276,7 @@ public class BluuTemplate
 			bot.Player.Logout();
 		}
 		bot.Log($"[{DateTime.Now:HH:mm:ss}] Turned In Quest {QuestID} successfully.");
-		bot.Quests.EnsureAccept(QuestID);
-		bot.Sleep(1000);
-		if (bot.Quests.CanComplete(QuestID)) goto maintainCompleteLoop;
+		while (!bot.Quests.IsInProgress(QuestID)) bot.Quests.EnsureAccept(QuestID);
 	}
 
 	/// <summary>
