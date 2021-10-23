@@ -10,8 +10,8 @@ public class BluuTemplate
 	public readonly int[] SkillOrder = { 3, 1, 2, 4 };
 	public int SaveStateLoops = 8700;
 	public int TurnInAttempts = 10;
-	public string[] EquippedItems = { };
 	public string[] RequiredItems = { };
+	public string[] EquippedItems = { };
 	//-----------EDIT ABOVE-------------//
 
 
@@ -181,7 +181,7 @@ public class BluuTemplate
 	maintainFarmLoop:
 		if (Temporary)
 		{
-			while(!bot.Inventory.ContainsTempItem(ItemName, ItemQuantity))
+			while (!bot.Inventory.ContainsTempItem(ItemName, ItemQuantity))
 			{
 				FarmLoop++;
 				if (bot.Map.Name != MapName) SafeMapJoin(MapName);
