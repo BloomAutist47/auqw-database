@@ -277,7 +277,7 @@ public class BluuPurpleTemplate
 	}
 
 	/// <summary>
-	/// Attempts to complete the quest thrice. If it fails to complete, logs out. If it successfully completes, re-accepts the quest and checks if it can be completed again.
+	/// Attempts to complete the quest with the set amount of {TurnInAttempts}. If it fails to complete, logs out. If it successfully completes, re-accepts the quest and checks if it can be completed again.
 	/// </summary>
 	public void SafeQuestComplete(int QuestID, int ItemID = -1)
 	{
@@ -299,7 +299,7 @@ public class BluuPurpleTemplate
 	/// <summary>
 	/// Stops the bot at yulgar if no parameters are set, or your specified map if the parameters are set.
 	/// </summary>
-	public void StopBot(string Text = "Bot stopped successfully.", string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn", string Caption = "Stopped")
+	public void StopBot(string Text = "Bot stopped successfully.", string MapName = "yulgar", string CellName = "Enter", string PadName = "Spawn", string Caption = "Stopped", string MessageType = "event")
 	{
 		//Must have the following functions in your script:
 		//SafeMapJoin
@@ -311,7 +311,7 @@ public class BluuPurpleTemplate
 		bot.Options.AggroMonsters = false;
 		bot.Log($"[{DateTime.Now:HH:mm:ss}] Bot stopped successfully.");
 		Console.WriteLine(Text);
-		SendMSGPacket(Text, Caption, "event");
+		SendMSGPacket(Text, Caption, MessageType);
 		ScriptManager.StopScript();
 	}
 
@@ -550,7 +550,7 @@ public class BluuPurpleTemplate
 
 		if (EmptySpace < SpaceNeeded)
 		{
-			StopBot($"Need {SpaceNeeded} empty inventory slots, please make room for the quest.", bot.Map.Name, bot.Player.Cell, bot.Player.Pad, "Error");
+			StopBot($"Need {SpaceNeeded} empty inventory slots, please make room for the quest.", bot.Map.Name, bot.Player.Cell, bot.Player.Pad, "Error", "moderator");
 		}
 	}
 
