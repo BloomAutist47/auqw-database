@@ -148,6 +148,50 @@ public class BluuPurpleTemplate
 	}
 
 	/// <summary>
+	/// Farms all the quests in a given string, must all be farmable in the same room and cell.
+	/// </summary>
+	public void MultiQuestFarm(string MapName, string CellName, string PadName, int[] QuestList, string MonsterName = "*")
+	{
+	/*
+		*   Must have the following functions in your script:
+		*   SafeMapJoin
+		*   SmartSaveState
+		*   SkillList
+		*   ExitCombat
+		*   GetDropList OR ItemWhitelist
+		*
+		*   Must have the following commands under public class Script:
+		*   int FarmLoop = 0;
+		*   int SavedState = 0;
+	*/
+
+	startFarmLoop:
+		if (FarmLoop > 0) goto maintainFarmLoop;
+		SavedState++;
+		bot.Log($"[{DateTime.Now:HH:mm:ss}] Started Farming Loop {SavedState}.");
+		goto maintainFarmLoop;
+
+	breakFarmLoop:
+		SmartSaveState();
+		bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
+		FarmLoop = 0;
+		goto startFarmLoop;
+
+	maintainFarmLoop:
+		FarmLoop++;
+		if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
+		if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+		foreach (var Quest in QuestList)
+		{
+			if (!bot.Quests.IsInProgress(Quest)) bot.Quests.EnsureAccept(Quest);
+			if (bot.Quests.CanComplete(Quest)) SafeQuestComplete(Quest);
+		}
+		bot.Options.AggroMonsters = true;
+		bot.Player.Attack(MonsterName);
+		if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+	}
+
+	/// <summary>
 	/// Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
 	/// </summary>
 	public void HuntItemFarm(string ItemName, int ItemQuantity, string MapName, bool Temporary = false, int QuestID = 0, string MonsterName = "*")
@@ -438,7 +482,8 @@ public class BluuPurpleTemplate
 	/// </summary>
 	public void SkillList(params int[] Skillset)
 	{
-		bot.RegisterHandler(1, b => {
+		bot.RegisterHandler(1, b =>
+		{
 			if (bot.Player.InCombat)
 			{
 				foreach (var Skill in Skillset)
@@ -454,7 +499,8 @@ public class BluuPurpleTemplate
 	/// </summary>
 	public void GetDropList(params string[] GetDropList)
 	{
-		bot.RegisterHandler(4, b => {
+		bot.RegisterHandler(4, b =>
+		{
 			foreach (string Item in GetDropList)
 			{
 				if (bot.Player.DropExists(Item)) bot.Player.Pickup(Item);
