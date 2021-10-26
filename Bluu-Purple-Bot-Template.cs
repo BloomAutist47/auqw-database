@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using RBot;
 using System.Collections.Generic;
 
@@ -64,7 +64,7 @@ public class BluuPurpleTemplate
 	/// <summary>
 	/// Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
 	/// </summary>
-	public void InvItemFarm(string ItemName, int ItemQuantity, string MapName, string CellName, string PadName, int QuestID = 0, string MonsterName = "*")
+	public void ItemFarm(string ItemName, int ItemQuantity, string MapName, string CellName, string PadName, bool Temporary = false, int QuestID = 0, string MonsterName = "*")
 	{
 	/*
 		*   Must have the following functions in your script:
@@ -92,58 +92,31 @@ public class BluuPurpleTemplate
 		goto startFarmLoop;
 
 	maintainFarmLoop:
-		while (!bot.Inventory.Contains(ItemName, ItemQuantity))
+		if (Temporary)
 		{
-			FarmLoop++;
-			if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
-			if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
-			if (QuestID > 0) bot.Quests.EnsureAccept(QuestID);
-			bot.Options.AggroMonsters = true;
-			bot.Player.Attack(MonsterName);
-			if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+			while (!bot.Inventory.ContainsTempItem(ItemName, ItemQuantity))
+			{
+				FarmLoop++;
+				if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
+				if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+				if (QuestID > 0) bot.Quests.EnsureAccept(QuestID);
+				bot.Options.AggroMonsters = true;
+				bot.Player.Attack(MonsterName);
+				if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+			}
 		}
-	}
-
-	/// <summary>
-	/// Farms you the required quantity of the specified temp item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
-	/// </summary>
-	public void TempItemFarm(string TempItemName, int TempItemQuantity, string MapName, string CellName, string PadName, int QuestID = 0, string MonsterName = "*")
-	{
-	/*
-		*   Must have the following functions in your script:
-		*   SafeMapJoin
-		*   SmartSaveState
-		*   SkillList
-		*   ExitCombat
-		*   GetDropList OR ItemWhitelist
-		*
-		*   Must have the following commands under public class Script:
-		*   int FarmLoop = 0;
-		*   int SavedState = 0;
-	*/
-
-	startFarmLoop:
-		if (FarmLoop > 0) goto maintainFarmLoop;
-		SavedState++;
-		bot.Log($"[{DateTime.Now:HH:mm:ss}] Started Farming Loop {SavedState}.");
-		goto maintainFarmLoop;
-
-	breakFarmLoop:
-		SmartSaveState();
-		bot.Log($"[{DateTime.Now:HH:mm:ss}] Completed Farming Loop {SavedState}.");
-		FarmLoop = 0;
-		goto startFarmLoop;
-
-	maintainFarmLoop:
-		while (!bot.Inventory.ContainsTempItem(TempItemName, TempItemQuantity))
+		else
 		{
-			FarmLoop++;
-			if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
-			if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
-			if (QuestID > 0) bot.Quests.EnsureAccept(QuestID);
-			bot.Options.AggroMonsters = true;
-			bot.Player.Attack(MonsterName);
-			if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+			while (!bot.Inventory.Contains(ItemName, ItemQuantity))
+			{
+				FarmLoop++;
+				if (bot.Map.Name != MapName) SafeMapJoin(MapName, CellName, PadName);
+				if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
+				if (QuestID > 0) bot.Quests.EnsureAccept(QuestID);
+				bot.Options.AggroMonsters = true;
+				bot.Player.Attack(MonsterName);
+				if (FarmLoop > SaveStateLoops) goto breakFarmLoop;
+			}
 		}
 	}
 
@@ -482,8 +455,7 @@ public class BluuPurpleTemplate
 	/// </summary>
 	public void SkillList(params int[] Skillset)
 	{
-		bot.RegisterHandler(1, b =>
-		{
+		bot.RegisterHandler(1, b => {
 			if (bot.Player.InCombat)
 			{
 				foreach (var Skill in Skillset)
@@ -499,8 +471,7 @@ public class BluuPurpleTemplate
 	/// </summary>
 	public void GetDropList(params string[] GetDropList)
 	{
-		bot.RegisterHandler(4, b =>
-		{
+		bot.RegisterHandler(4, b => {
 			foreach (string Item in GetDropList)
 			{
 				if (bot.Player.DropExists(Item)) bot.Player.Pickup(Item);
