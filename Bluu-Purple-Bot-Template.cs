@@ -47,18 +47,19 @@ public class BluuPurpleTemplate
 	------------------------------------------------------------------------------------------------------------*/
 
 	/*
-		*   These functions are used to perform a major action in AQW.
-		*   All of them require at least one of the Auxiliary Functions listed below to be present in your script.
-		*   Some of the functions require you to pre-declare certain integers under "public class Script"
-		*   InvItemFarm and TempItemFarm will require some Background Functions to be present as well.
-		*   All of this information can be found inside the functions. Make sure to read.
-		*   InvItemFarm("ItemName", ItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName");
-		*   TempItemFarm("TempItemName", TempItemQuantity, "MapName", "MapNumber", "CellName", "PadName", QuestID, "MonsterName");
-		*   SafeEquip("ItemName");
-		*   SafePurchase("ItemName", ItemQuantityNeeded, "MapName", "MapNumber", ShopID)
+		*	These functions are used to perform a major action in AQW.
+		*	All of them require at least one of the Auxiliary Functions listed below to be present in your script.
+		*	Some of the functions require you to pre-declare certain integers under "public class Script"
+		*	ItemFarm, MultiQuestFarm and HuntItemFarm will require some Background Functions to be present as well.
+		*	All of this information can be found inside the functions. Make sure to read.
+		*	ItemFarm("ItemName", ItemQuantity, "MapName", "MapNumber", "CellName", "PadName", Temporary, QuestID, "MonsterName");
+		*	MultiQuestFarm("MapName", "CellName", "PadName", QuestList[], "MonsterName");
+		*	HuntItemFarm("ItemName", ItemQuantity, "MapName", Temporary, QuestID, "MonsterName");
+		*	SafeEquip("ItemName");
+		*	SafePurchase("ItemName", ItemQuantityNeeded, "MapName", "MapNumber", ShopID)
 		*	SafeSell("ItemName", ItemQuantityNeeded)
 		*	SafeQuestComplete(QuestID, ItemID)
-		*	StopBot ("Text", "MapName", "MapNumber", "CellName", "PadName")
+		*	StopBot ("Text", "MapName", "MapNumber", "CellName", "PadName", "Caption")
 	*/
 
 	/// <summary>
@@ -342,7 +343,7 @@ public class BluuPurpleTemplate
 	/// </summary>
 	public void SmartSaveState()
 	{
-		bot.SendPacket("%xt%zm%whisper%1% creating save state%" + bot.Player.Username + "%");
+		bot.SendPacket("%xt%zm%whisper%1%creating save state%" + bot.Player.Username + "%");
 		bot.Log($"[{DateTime.Now:HH:mm:ss}] Successfully Saved State.");
 	}
 
@@ -385,12 +386,14 @@ public class BluuPurpleTemplate
 		*   Some Invokable Functions may call or require the assistance of some Background Functions as well.
 		*   These functions are to be run at the very beginning of the bot under public class Script.
 		*   ConfigureBotOptions("PlayerName", "GuildName", LagKiller, SafeTimings, RestPackets, AutoRelogin, PrivateRooms, InfiniteRange, SkipCutscenes, ExitCombatBeforeQuest)
-		*   ConfigureLiteSettings(UntargetSelf, UntargetDead, CustomDrops, ReacceptQuest, SmoothBackground)
+		*   ConfigureLiteSettings(UntargetSelf, UntargetDead, CustomDrops, ReacceptQuest, SmoothBackground, Debugger)
 		*   SkillList(int[])
 		*   GetDropList(string[])
 		*   ItemWhiteList(string[])
 		*   EquipList(string[])
 		*   UnbankList(string[])
+		*   CheckSpace(string[])
+		*   SendMSGPacket("Message", "Name", "MessageType")
 	*/
 
 	/// <summary>
@@ -532,15 +535,15 @@ public class BluuPurpleTemplate
 	/// <summary>
 	/// Checks the amount of space you need from an array's length/set amount.
 	/// </summary>
-	/// <param name="UnbankList"></param>
-	public void CheckSpace(params string[] UnbankList)
+	/// <param name="ItemList"></param>
+	public void CheckSpace(params string[] ItemList)
 	{
 		int MaxSpace = bot.GetGameObject<int>("world.myAvatar.objData.iBagSlots");
 		int FilledSpace = bot.GetGameObject<int>("world.myAvatar.items.length");
 		int EmptySpace = MaxSpace - FilledSpace;
 		int SpaceNeeded = 0;
 
-		foreach (var Item in UnbankList)
+		foreach (var Item in ItemList)
 		{
 			if (!bot.Inventory.Contains(Item)) SpaceNeeded++;
 		}
