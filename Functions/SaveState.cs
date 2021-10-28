@@ -1,9 +1,5 @@
 /*  Filename: SaveState.cs
     Author: Bloom
-    Summary: AQW saves your current sesssion/progres whenever you
-             Change Maps, equip an item, or logout.
-             This function "SaveState()" will enter /yulgar to
-             save your state.
 */
 
 using System;
