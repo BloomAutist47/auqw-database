@@ -4,8 +4,6 @@ This is the AutoQuest Worlds Information Database, Primarily consisting of RBot 
 - [General Info](##General)
 
 
-
-
 ## General
 RBot Client: [Link](https://github.com/rodit/RBot/releases/)  
 RBot Docs: [Link](https://rodit.github.io/rbot-scripts/)  
@@ -16,9 +14,9 @@ Join Discord: [Link](discord.io/AQWBots)
 AuQW Portal: [Link](https://auqw.tk/)  
 AuQW Subreddit: [Link](https://www.reddit.com/r/AutoQuestWorlds/)  
     
-    
    
 ### Tip
 Download the source code of rbot and check the Scripts folder. It contains all of the functions/vars/etc... uncovered by the docs. Very useful and very descriptive.
 
-
+## How to Join
+Make a pull request in to upload your function then ping Bloom or an admin in the server.
