@@ -52,9 +52,8 @@ public class BluuPurpleTemplate
 		*	Some of the functions require you to pre-declare certain integers under "public class Script"
 		*	ItemFarm, MultiQuestFarm and HuntItemFarm will require some Background Functions to be present as well.
 		*	All of this information can be found inside the functions. Make sure to read.
-		*	ItemFarm("ItemName", ItemQuantity, "MapName", "MapNumber", "CellName", "PadName", Temporary, QuestID, "MonsterName");
+		*	ItemFarm("ItemName", ItemQuantity, Temporary, HuntFor, QuestID, "MonsterName", "MapName", "CellName", "PadName");
 		*	MultiQuestFarm("MapName", "CellName", "PadName", QuestList[], "MonsterName");
-		*	HuntItemFarm("ItemName", ItemQuantity, "MapName", Temporary, QuestID, "MonsterName");
 		*	SafeEquip("ItemName");
 		*	SafePurchase("ItemName", ItemQuantityNeeded, "MapName", "MapNumber", ShopID)
 		*	SafeSell("ItemName", ItemQuantityNeeded)
@@ -65,7 +64,7 @@ public class BluuPurpleTemplate
 	/// <summary>
 	/// Farms you the specified quantity of the specified item with the specified quest accepted from specified monsters in the specified location. Saves States every ~5 minutes.
 	/// </summary>
-	public void ItemFarm(string ItemName, int ItemQuantity, string MapName, string CellName = "Enter", string PadName = "Spawn", bool Temporary = false, int QuestID = 0, bool HuntFor = false, string MonsterName = "*")
+	public void ItemFarm(string ItemName, int ItemQuantity, bool Temporary = false, bool HuntFor = false, int QuestID = 0, string MonsterName = "*", string MapName = "Map", string CellName = "Enter", string PadName = "Spawn")
 	{
 	/*
 		*   Must have the following functions in your script:
