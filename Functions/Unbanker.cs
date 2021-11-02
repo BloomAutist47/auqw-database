@@ -6,6 +6,7 @@
 
 using RBot;
 using System;
+using System.Linq;
 
 public class Script {
 	public ScriptInterface bot => ScriptInterface.Instance;
@@ -46,7 +47,7 @@ public class Script {
 		bot.Player.LoadBank();
 
 		// Declares AC items to bank
-		Array Whitelisted = {"Note", "Item", "Resource", "QuestItem", "ServerUse"};
+		string[] Whitelisted = {"Note", "Item", "Resource", "QuestItem", "ServerUse"};
 
 		// Banks unneeded items that are included in the whitelisted
 		foreach(var item in bot.Inventory.Items) {
