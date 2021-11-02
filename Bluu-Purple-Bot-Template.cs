@@ -343,26 +343,20 @@ public class BluuPurpleTemplate
 	{
 		//Must have the following functions in your script:
 		//ExitCombat
-
-		while (bot.Map.Name != MapName.ToLower())
+		string mapname = MapName.ToLower();
+		while (bot.Map.Name != mapname)
 		{
 			ExitCombat();
-			if (string.Equals(MapName.ToLower(), "tercessuinotlim", StringComparison.OrdinalIgnoreCase))
+			if (mapname == "tercessuinotlim")
 			{
-				while (bot.Map.Name != "citadel")
-				{
-					bot.Player.Join($"citadel-{MapNumber}", "m22", "Left");
-					bot.Wait.ForMapLoad("citadel");
-					bot.Sleep(500);
-				}
-				if (bot.Player.Cell != "m22") bot.Player.Jump("m22", "Left");
+				bot.Player.Jump("m22", "Center");
 			}
-			bot.Player.Join($"{MapName.ToLower()}-{MapNumber}", CellName, PadName);
-			bot.Wait.ForMapLoad(MapName.ToLower());
+			bot.Player.Join($"{mapname}-{MapNumber}", CellName, PadName);
+			bot.Wait.ForMapLoad(mapname);
 			bot.Sleep(500);
 		}
 		if (bot.Player.Cell != CellName) bot.Player.Jump(CellName, PadName);
-		bot.Log($"[{DateTime.Now:HH:mm:ss}] Joined map {MapName.ToLower()}-{MapNumber}, positioned at the {PadName} side of cell {CellName}.");
+		bot.Log($"[{DateTime.Now:HH:mm:ss}] Joined map {mapname}-{MapNumber}, positioned at the {PadName} side of cell {CellName}.");
 	}
 
 	/*------------------------------------------------------------------------------------------------------------
