@@ -216,14 +216,19 @@ public class BluuPurpleTemplate
 	/// <param name="MonsterName">Name of the monster</param>
 	public void AttackType(string AttackType, string MonsterName)
 	{
-		if (AttackType == "A" || AttackType == "a" || AttackType == "Attack" || AttackType == "attack")
+		string attack_ = AttackType.lower();
+
+		if (attack_ == "a" || attack_ == "attack")
 		{
 			bot.Player.Attack(MonsterName);
+			return;
 		}
-		else if (AttackType == "H" || AttackType == "h" || AttackType == "Hunt" || AttackType == "hunt")
+		else if (attack_ == "h" || attack_ == "hunt")
 		{
 			bot.Player.Hunt(MonsterName);
+			return;
 		}
+		return;
 	}
 
 	/// <summary>
@@ -347,10 +352,7 @@ public class BluuPurpleTemplate
 		while (bot.Map.Name != mapname)
 		{
 			ExitCombat();
-			if (mapname == "tercessuinotlim")
-			{
-				bot.Player.Jump("m22", "Center");
-			}
+			if (mapname == "tercessuinotlim") bot.Player.Jump("m22", "Center");
 			bot.Player.Join($"{mapname}-{MapNumber}", CellName, PadName);
 			bot.Wait.ForMapLoad(mapname);
 			bot.Sleep(500);
