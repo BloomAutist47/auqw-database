@@ -210,9 +210,9 @@ public class BluuPurpleTemplate
 	}
 
 	/// <summary>
-	/// Sets attack type to Attack(Attack/attack/A/a) or Hunt(Hunt/hunt/H/h)
+	/// Sets attack type to Attack(Attack/A) or Hunt(Hunt/H)
 	/// </summary>
-	/// <param name="AttackType">Attack/attack/A/a or Hunt/hunt/H/h</param>
+	/// <param name="AttackType">Attack/A or Hunt/H</param>
 	/// <param name="MonsterName">Name of the monster</param>
 	public void AttackType(string AttackType, string MonsterName)
 	{
@@ -221,14 +221,11 @@ public class BluuPurpleTemplate
 		if (attack_ == "a" || attack_ == "attack")
 		{
 			bot.Player.Attack(MonsterName);
-			return;
 		}
 		else if (attack_ == "h" || attack_ == "hunt")
 		{
 			bot.Player.Hunt(MonsterName);
-			return;
 		}
-		return;
 	}
 
 	/// <summary>
