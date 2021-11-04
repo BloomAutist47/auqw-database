@@ -216,7 +216,7 @@ public class BluuPurpleTemplate
 	/// <param name="MonsterName">Name of the monster</param>
 	public void AttackType(string AttackType, string MonsterName)
 	{
-		string attack_ = AttackType.lower();
+		string attack_ = AttackType.ToLower();
 
 		if (attack_ == "a" || attack_ == "attack")
 		{
