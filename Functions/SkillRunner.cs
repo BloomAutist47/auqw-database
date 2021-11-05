@@ -39,7 +39,7 @@ public class Script {
    public int SkillWait = 0; // inherent wait between each skill
 
 	public void ScriptMain(ScriptInterface bot){
-
+      /// <note> The skill index is the same as the aqw UI keys. that means auto attack is skill 1 and potion is skill 6
       // 1.) Declare skill string
       string Skill_VHL = "h2222>4, 6, 5, 3, h1000>2, 1";
 		string Skill_LR = "1,2,3,4, w500, 5,6";
