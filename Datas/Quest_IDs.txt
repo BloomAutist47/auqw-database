@@ -6254,36 +6254,6 @@
 [6388]	Get Rid of Bolton
 [6389]	Get Rid of the Imps
 [6390]	Get Into the Dungeon
-[6391]	Destroy the Guards
-[6392]	Get the Key
-[6393]	Find Lynaria
-[6394]	Destroy Dethrix
-[6395]	Siphon the Power (Farming)
-[6396]	Juice for a Tonic (Farming)
-[6397]	Dark Doomblade
-[6398]	Monstrous DoomBlade
-[6399]	He's Not Your Friend
-[6400]	Defeat the Dragon
-[6401]	Power Boost
-[6402]	Take His Knights
-[6403]	Destroy the Light
-[6404]	More Power!
-[6405]	Destroy the Force Field
-[6406]	Defeat the Battalion
-[6407]	Destroy the Beast
-[6408]	Learn from the Past
-[6409]	Tired of Gremlins
-[6410]	I Don?t Mean To Be CRUDE
-[6411]	When I Say Jump...
-[6412]	Energizing!
-[6413]	Cabin in the Woods
-[6414]	A Base-ic Solution
-[6415]	Surprise!
-[6416]	First Aid Supplies
-[6417]	Tool Time
-[6418]	Obstacle Course
-[6419]	Barricades!
-[6420]	Take Him Out!
 [6421]	Wood for Trap?
 [6422]	Souvenirs for Bobby
 [6423]	Gathering Information
@@ -8195,3 +8165,39 @@
 [8347]	Bones For Stones
 [8348]	The Ice Orb
 [8349]	A Hymn of Ice and Fire, and Light and Dark
+[8350]	Forces of Chaorruption
+[8351]	Phantom Chaos
+[8352]	Spies of the Queen
+[8353]	Portal of Chaos
+[8354]	Slain Children
+[8355]	Dragons Felled By Chaos
+[8356]	The Queen's Generals
+[8357]	Portal of Chaos II
+[8358]	Guilt of the Past
+[8359]	A Giant of Chaos
+[8360]	The First Champion of Chaos
+[8361]	The Queen of Monsters
+[8362]	Mommy Was Very Bad
+[8363]	Dolls' Hide and Seek
+[8364]	Arts and Crafts
+[8365]	Lemonade, Chewy Ice
+[8366]	Screams and Tag
+[8367]	Playful Teething
+[8368]	Days Pass
+[8369]	Pinned Bugs
+[8370]	Sweet Glue
+[8371]	Witch Soup
+[8372]	Written Promise
+[8373]	All Fall Down
+[8374]	Lullaby
+[8375]	Scare Uniforms
+[8376]	SKULLS
+[8377]	MORE SKULLS
+[8378]	MORE SKULLS ON THE SKULLS
+[8379]	MORE SKULLS ON THOSE SKULLS
+[8380]	VOIDUMINANCE
+[8381]	Empower Vordred's Armor
+[8382]	Memet's Birthday Quest
+[8383]	Kotaro's Birthday Quest
+[8384]	Inanitas' Birthday Quest
+[8385]	Arlette's Birthday Quest
