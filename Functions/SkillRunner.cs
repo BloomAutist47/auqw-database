@@ -79,7 +79,6 @@ public class Script {
          });
 
       // 3.) Skill use
-      SkillUse("vhl");
       while (true) {
          if (bot.Player.Cell != "Enter") bot.Player.Jump("Enter", "Spawn");
          SkillUse("solo");
