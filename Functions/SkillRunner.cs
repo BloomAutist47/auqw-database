@@ -28,8 +28,8 @@ public class DataSkill {
 
 
 public class Script {
-	public ScriptInterface bot => ScriptInterface.Instance;
-	public bool EnableSkillRun = true;
+   public ScriptInterface bot => ScriptInterface.Instance;
+   public bool EnableSkillRun = true;
    
    // Class Variable
    public List<DataSkill> SkillFarm = new List<DataSkill>();
@@ -38,11 +38,11 @@ public class Script {
    public string ClassSolo = "Void Highlord";
    public int SkillWait = 0; // inherent wait between each skill
 
-	public void ScriptMain(ScriptInterface bot){
+   public void ScriptMain(ScriptInterface bot){
       /// <note> The skill index is the same as the aqw UI keys. that means auto attack is skill 1 and potion is skill 6
       // 1.) Declare skill string
       string Skill_VHL = "h2222>4, 6, 5, 3, h1000>2, 1";
-		string Skill_LR = "1,2,3,4, w500, 5,6";
+      string Skill_LR = "1,2,3,4, w500, 5,6";
 
             // Skill String explanation
             
@@ -90,7 +90,7 @@ public class Script {
    
 
 
-	}
+   }
 
    /// ================================================ ///
    ///             Skill Section 
