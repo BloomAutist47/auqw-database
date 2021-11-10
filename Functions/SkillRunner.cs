@@ -78,11 +78,15 @@ public class Script {
             {Skill_LR, SkillFarm}
          });
 
-      // 3.) Skill use
+      // 3.) Edit SkillUse function only
+
+      // 4.) Skill use
       while (true) {
          if (bot.Player.Cell != "Enter") bot.Player.Jump("Enter", "Spawn");
          SkillUse("solo");
       }
+
+
    
 
 
