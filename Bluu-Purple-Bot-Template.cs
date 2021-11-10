@@ -382,7 +382,7 @@ public class BluuPurpleTemplate
 	/// Change the player's name and guild for your bots specifications.
 	/// Recommended Default Bot Configurations.
 	/// </summary>
-	public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/", bool LagKiller = true, bool SafeTimings = true, bool RestPackets = true, bool AutoRelogin = true, bool PrivateRooms = false, bool InfiniteRange = true, bool SkipCutscenes = true, bool ExitCombatBeforeQuest = true)
+	public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/", bool LagKiller = true, bool SafeTimings = true, bool RestPackets = true, bool AutoRelogin = true, bool PrivateRooms = false, bool InfiniteRange = true, bool SkipCutscenes = true, bool ExitCombatBeforeQuest = true, bool HideMonster=true)
 	{
 		SendMSGPacket("Configuring bot.", "AuQW", "moderator");
 		bot.Options.CustomName = PlayerName;
@@ -397,7 +397,7 @@ public class BluuPurpleTemplate
 		bot.Options.ExitCombatBeforeQuest = ExitCombatBeforeQuest;
 		bot.Events.PlayerDeath += PD => ScriptManager.RestartScript();
 		bot.Events.PlayerAFK += PA => ScriptManager.RestartScript();
-		HideMonsters(true);
+		HideMonsters(HideMonster);
 	}
 
 	/// <summary>
