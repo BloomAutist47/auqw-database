@@ -5,7 +5,7 @@
              This function "SaveStateItem()" will enter equip a cheap
              item to save your state.
     Remark:  DONT USE THIS. THIS IS TERRIBLE SHIT FUNCTION
-             Because SaveState() is faster.
+             Because SaveState() in template.cs is faster.
 */
 
 using System;
@@ -25,6 +25,47 @@ public class Script {
         SaveStateItem();
         
 	}
+
+    /// <summary>
+    /// Joins /yulgar or /tavern to save your current session.
+    /// Will return back to initial map and return back agro state.
+    /// </summary>
+    /// <remarks>Takes 4s.</remarks>
+    public void SaveState() {
+
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Saved State Started.");
+
+        // Remembers location
+        string CurrentMap = bot.Map.Name;
+        string CurrentCell = bot.Player.Cell;
+        string CurrentPad = bot.Player.Pad;
+
+        // Turns off Agro. Will turn it on later if its on at first
+        bool AgroTrue = false;
+        if (bot.Options.AggroMonsters) {
+            bot.Options.AggroMonsters = false;
+            AgroTrue = true;
+        }
+
+        ExitCombat();
+
+        if (bot.Map.Name != "yulgar") {
+            SafeMapJoin("yulgar", mapNumber, "Enter", "Spawn");
+        } else {
+            SafeMapJoin("tavern", mapNumber, "Enter", "Spawn");
+        }
+        SafeMapJoin(CurrentMap, mapNumber, CurrentCell, CurrentPad);
+
+        // Logs and returns
+        SavedState += 1;
+        bot.Log($"[{DateTime.Now:HH:mm:ss}] Saved State Ended {SavedState} time(s).");
+
+        // Turns agro back on if initially turned on.
+        if (AgroTrue == true) bot.Options.AggroMonsters = true;
+        return;
+        
+
+    }
 
 
     /// <summary> 
