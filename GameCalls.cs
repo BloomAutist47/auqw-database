@@ -14,8 +14,19 @@ public class Testingclass {
 
       HideMonsters(true);
       ShowFPSCounter(true);
-    
+      SetFPS(60);
     }
+
+
+
+   /// <summary>
+   /// Sets the game FPS
+   /// </summary>
+   /// <param name="FPS"> Frames per second </param>
+   public void SetFPS(int FPS) {
+      bot.SetGameObject("stage.frameRate", FPS);
+   }
+
 
    /// <summary>
    /// Hides the monsters for performance

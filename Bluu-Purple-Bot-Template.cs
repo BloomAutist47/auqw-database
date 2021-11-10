@@ -397,6 +397,26 @@ public class BluuPurpleTemplate
 		bot.Options.ExitCombatBeforeQuest = ExitCombatBeforeQuest;
 		bot.Events.PlayerDeath += PD => ScriptManager.RestartScript();
 		bot.Events.PlayerAFK += PA => ScriptManager.RestartScript();
+		HideMonsters(true);
+	}
+
+	/// <summary>
+	/// Hides the monsters for performance
+	/// </summary>
+	/// <param name="Value"> true -> hides monsters. false -> reveals them </param>
+	public void HideMonsters(bool Value) {
+	  switch(Value) {
+	     case true:
+	        if (!bot.GetGameObject<bool>("ui.monsterIcon.redX.visible")) {
+	           bot.CallGameFunction("world.toggleMonsters");
+	        }
+	        return;
+	     case false:
+	        if (bot.GetGameObject<bool>("ui.monsterIcon.redX.visible")) {
+	           bot.CallGameFunction("world.toggleMonsters");
+	        }
+	        return;
+	  }
 	}
 
 	/// <summary>
