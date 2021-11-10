@@ -24,6 +24,8 @@ public class BluuPurpleTemplate
 		ConfigureBotOptions();
 		ConfigureLiteSettings();
 
+		DeathHandler();
+
 		SkillList(SkillOrder);
 		EquipList(EquippedItems);
 		UnbankList(RequiredItems);
@@ -395,7 +397,7 @@ public class BluuPurpleTemplate
 		bot.Options.InfiniteRange = InfiniteRange;
 		bot.Options.SkipCutscenes = SkipCutscenes;
 		bot.Options.ExitCombatBeforeQuest = ExitCombatBeforeQuest;
-		bot.Events.PlayerDeath += PD => ScriptManager.RestartScript();
+		// bot.Events.PlayerDeath += PD => ScriptManager.RestartScript();
 		bot.Events.PlayerAFK += PA => ScriptManager.RestartScript();
 		HideMonsters(HideMonster);
 	}
@@ -567,4 +569,18 @@ public class BluuPurpleTemplate
 		// bot.SendClientPacket($"%xt%{MessageType}%-1%{Name}: {Message}%");
 		bot.SendClientPacket($"%xt%chatm%0%{MessageType}~{Message}%{Name}%");
 	}
+
+
+	public void DeathHandler() {
+      bot.RegisterHandler(2, b => {
+         if (bot.Player.State==0) {
+            bot.Player.SetSpawnPoint();
+            ExitCombat();
+            bot.Sleep(12000);
+         }
+      });
+	}
+
+
+
 }
