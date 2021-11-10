@@ -398,7 +398,7 @@ public class BluuPurpleTemplate
 		bot.Options.SkipCutscenes = SkipCutscenes;
 		bot.Options.ExitCombatBeforeQuest = ExitCombatBeforeQuest;
 		// bot.Events.PlayerDeath += PD => ScriptManager.RestartScript();
-		bot.Events.PlayerAFK += PA => ScriptManager.RestartScript();
+		// bot.Events.PlayerAFK += PA => ScriptManager.RestartScript();
 		HideMonsters(HideMonster);
 	}
 
