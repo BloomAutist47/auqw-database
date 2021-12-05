@@ -24,6 +24,8 @@ public class BluuPurpleTemplate
 		ConfigureBotOptions();
 		ConfigureLiteSettings();
 
+		DeathHandler();
+
 		SkillList(SkillOrder);
 		EquipList(EquippedItems);
 		UnbankList(RequiredItems);
@@ -382,7 +384,7 @@ public class BluuPurpleTemplate
 	/// Change the player's name and guild for your bots specifications.
 	/// Recommended Default Bot Configurations.
 	/// </summary>
-	public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/", bool LagKiller = true, bool SafeTimings = true, bool RestPackets = true, bool AutoRelogin = true, bool PrivateRooms = false, bool InfiniteRange = true, bool SkipCutscenes = true, bool ExitCombatBeforeQuest = true)
+	public void ConfigureBotOptions(string PlayerName = "Bot By AuQW", string GuildName = "https://auqw.tk/", bool LagKiller = true, bool SafeTimings = true, bool RestPackets = true, bool AutoRelogin = true, bool PrivateRooms = false, bool InfiniteRange = true, bool SkipCutscenes = true, bool ExitCombatBeforeQuest = true, bool HideMonster=true)
 	{
 		SendMSGPacket("Configuring bot.", "AuQW", "moderator");
 		bot.Options.CustomName = PlayerName;
@@ -395,8 +397,28 @@ public class BluuPurpleTemplate
 		bot.Options.InfiniteRange = InfiniteRange;
 		bot.Options.SkipCutscenes = SkipCutscenes;
 		bot.Options.ExitCombatBeforeQuest = ExitCombatBeforeQuest;
-		bot.Events.PlayerDeath += PD => ScriptManager.RestartScript();
-		bot.Events.PlayerAFK += PA => ScriptManager.RestartScript();
+		// bot.Events.PlayerDeath += PD => ScriptManager.RestartScript();
+		// bot.Events.PlayerAFK += PA => ScriptManager.RestartScript();
+		HideMonsters(HideMonster);
+	}
+
+	/// <summary>
+	/// Hides the monsters for performance
+	/// </summary>
+	/// <param name="Value"> true -> hides monsters. false -> reveals them </param>
+	public void HideMonsters(bool Value) {
+	  switch(Value) {
+	     case true:
+	        if (!bot.GetGameObject<bool>("ui.monsterIcon.redX.visible")) {
+	           bot.CallGameFunction("world.toggleMonsters");
+	        }
+	        return;
+	     case false:
+	        if (bot.GetGameObject<bool>("ui.monsterIcon.redX.visible")) {
+	           bot.CallGameFunction("world.toggleMonsters");
+	        }
+	        return;
+	  }
 	}
 
 	/// <summary>
@@ -547,4 +569,18 @@ public class BluuPurpleTemplate
 		// bot.SendClientPacket($"%xt%{MessageType}%-1%{Name}: {Message}%");
 		bot.SendClientPacket($"%xt%chatm%0%{MessageType}~{Message}%{Name}%");
 	}
+
+
+	public void DeathHandler() {
+      bot.RegisterHandler(2, b => {
+         if (bot.Player.State==0) {
+            bot.Player.SetSpawnPoint();
+            ExitCombat();
+            bot.Sleep(12000);
+         }
+      });
+	}
+
+
+
 }
