@@ -243,11 +243,8 @@ public class BluuPurpleTemplate
 		{
 			if (bot.Map.Name != MapName.ToLower()) SafeMapJoin(MapName.ToLower(), "Wait", "Spawn");
 			ExitCombat();
-			if (!bot.Shops.IsShopLoaded)
-			{
-				bot.Shops.Load(ShopID);
-				bot.Log($"[{DateTime.Now:HH:mm:ss}] Loaded Shop {ShopID}.");
-			}
+			bot.Shops.Load(ShopID);
+			bot.Log($"[{DateTime.Now:HH:mm:ss}] Loaded Shop {ShopID}.");
 			bot.Shops.BuyItem(ItemName);
 			bot.Log($"[{DateTime.Now:HH:mm:ss}] Purchased {ItemName} from Shop {ShopID}.");
 		}
